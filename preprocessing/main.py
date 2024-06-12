@@ -3,8 +3,7 @@ from rapidfuzz import process
 import pandas as pd
 import pgeocode as pgeo
 
-
-missingPostalCodes = []
+postalcode_cache = {}
 
 def convertDataToParquet(df: pd.DataFrame, name: str) -> None:
   df.to_parquet(name, index=False)
@@ -17,7 +16,7 @@ def loadData(rechnung_path: str, kunden_path: str) -> tuple:
 
 
 def mergeOnKunden(df_rechnung: pd.DataFrame, df_kunden: pd.DataFrame) -> pd.DataFrame:
-  rechnung_columns = ["Unternehmen", "Artikel_SK", "Auftragsdatum_SK", "Kunde_Verkauf_SK", "Umsatztyp", "Preis Verpackungseinheit", "Menge", "Nettoumsatz", "Productgroup", "Productsubgroup", "Business Area", "Type"]
+  rechnung_columns = ["Belegnummer", "Unternehmen", "Artikel_SK", "Auftragsdatum_SK", "Kunde_Verkauf_SK", "Umsatztyp", "Preis Verpackungseinheit", "Menge", "Nettoumsatz", "Productgroup", "Productsubgroup", "Business Area", "Type"]
   df_rechnung = df_rechnung[rechnung_columns]
 
   kunden_columns = ["Kunde_SK", "Ort", "PLZ-Code", "Branchengruppe", "Vertriebskanalkategorie", "Vertriebskanal"]
@@ -32,6 +31,7 @@ def initialCleaning(df: pd.DataFrame) -> pd.DataFrame:
 
   # Translate to English
   df = df.rename(columns={
+    "Belegnummer": "OrderNumber",
     "Artikel_SK": "ArticleID",
     "Unternehmen": "Company",
     "Auftragsdatum_SK": "OrderDate",
@@ -97,7 +97,7 @@ def blendPostalCodes(df: pd.DataFrame, plz_path: str):
 
   print('Missing states filled in')
 
-  filtered_df = merged_df.drop_duplicates(subset=['ArticleID', 'OrderDate', 'CustomerID'])
+  filtered_df = merged_df.drop_duplicates(subset=['OrderNumber', 'ArticleID', 'OrderDate', 'CustomerID'])
   filtered_df.loc[:, 'Final_City'] = filtered_df['Final_City'].str.split(',').str[0]
   return filtered_df
 
@@ -111,6 +111,10 @@ def getClosestMatch(row: pd.Series, postal_code_to_cities: dict) -> str:
 
 
 def findNearestState(postal_code):
+  if postal_code in postalcode_cache:
+    print(f"Found state {postalcode_cache[postal_code]} in cache for postal code {postal_code}")
+    return postalcode_cache[postal_code]
+
   original_code = postal_code
   offset = 1
   
@@ -122,13 +126,15 @@ def findNearestState(postal_code):
     if decrementing_code >= 0:
       location = nomi.query_postal_code(decrementing_code)
       if not pd.isna(location['state_name']):
-        print(f"Found state {location['state_name']} for postal code {original_code}, with searched postal code {decrementing_code}")
+        postalcode_cache[original_code] = location['state_name']
+        print(f"Found state {location['state_name']} for postal code {original_code}")
         return location['state_name']
 
     # Check incrementing postal code
     location = nomi.query_postal_code(incrementing_code)
     if not pd.isna(location['state_name']):
-      print(f"Found state {location['state_name']} for postal code {original_code}, with searched postal code {incrementing_code}")
+      postalcode_cache[original_code] = location['state_name']
+      print(f"Found state {location['state_name']} for postal code {original_code}")
       return location['state_name']
 
     # Increase the offset
@@ -152,6 +158,19 @@ def fillMissingStates(row):
         return row['State']
 
 
+def finalCleaning(df: pd.DataFrame) -> pd.DataFrame:
+  # Manually fill in missing states
+  df.loc[(df['PostalCode'] == '69966') & (df['State'].isnull()), 'State'] = 'Baden-Württemberg'
+  df.loc[(df['PostalCode'] == '8312') & (df['State'].isnull()), 'State'] = 'Sachsen'
+  df.loc[(df['PostalCode'] == '40002') & (df['State'].isnull()), 'State'] = 'Nordrhein-Westfalen'
+  df.loc[(df['PostalCode'] == '7801') & (df['State'].isnull()), 'State'] = 'Thüringen'
+
+  # Drop City_inconsistent, City_correct, and rename Final_City to City
+  df = df.drop(columns=['City_inconsistent', 'City_correct'])
+  df = df.rename(columns={'Final_City': 'City'})
+  return df
+
+
 if __name__ == "__main__":
   nomi = pgeo.Nominatim('de')
   df_rechnung, df_kunden = loadData('data/Rechnungen.parquet', 'data/Kunden.csv')
@@ -162,4 +181,5 @@ if __name__ == "__main__":
   print('Data cleaned')
   df_blended = blendPostalCodes(df_cleaned, 'data/zuordnung_plz_ort.csv')
   print('Data blended')
-  convertDataToParquet(df_blended, 'data/Blended.parquet')
+  df_final = finalCleaning(df_blended)
+  df_final.to_parquet('data/Final.parquet', index=False)
