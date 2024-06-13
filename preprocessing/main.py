@@ -106,7 +106,7 @@ def getClosestMatch(row: pd.Series, postal_code_to_cities: dict) -> str:
     possible_cities = postal_code_to_cities.get(row['PostalCode'], [])
     if len(possible_cities) == 0:
         return row['City_inconsistent']  # Return original if no cities are found
-    closest_match = process.extractOne(row['City_inconsistent'], possible_cities)[0]
+    closest_match = process.extractOne(row['City_inconsistent'], possible_cities)[0] #! INVESTIGATE
     return closest_match
 
 
