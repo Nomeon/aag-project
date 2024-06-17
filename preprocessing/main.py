@@ -56,6 +56,8 @@ def initialCleaning(df: pd.DataFrame) -> pd.DataFrame:
   df = df.dropna(subset=["City", "PostalCode"])
   df = df[df['PostalCode'].str.match(r"^(?!00000)\d{5}$")]
 
+  df['OrderDate'] = pd.to_datetime(df['OrderDate'], format='%Y%m%d')
+  df['Season'] = df['OrderDate'].dt.month.apply(seasonFromMonth)
   df['CustomerID'] = df['CustomerID'].astype(str)
   df['SalesChannel'] = df['SalesChannelCategory'].str.split('_').str[0]
   df = df[df['SalesChannel'].isin(['B2B', 'B2C', 'B2B2C'])]
@@ -63,6 +65,19 @@ def initialCleaning(df: pd.DataFrame) -> pd.DataFrame:
   # Remove rows where NetRevenue is NaN
   df = df.dropna(subset=['NetRevenue'])
   return df
+
+
+def seasonFromMonth(month):
+  if month in [12, 1, 2]:
+    return 'Winter'
+  elif month in [3, 4, 5]:
+    return 'Spring'
+  elif month in [6, 7, 8]:
+    return 'Summer'
+  elif month in [9, 10, 11]:
+    return 'Autumn'
+  else:
+    return 'Unknown'
 
 
 def blendPostalCodes(df: pd.DataFrame, plz_path: str):
