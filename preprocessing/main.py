@@ -4,6 +4,7 @@ import pandas as pd
 import pgeocode as pgeo
 
 postalcode_cache = {}
+seasons = {1: 'Winter', 2: 'Spring', 3: 'Summer', 4: 'Autumn'}
 
 def convertDataToParquet(df: pd.DataFrame, name: str) -> None:
   df.to_parquet(name, index=False)
@@ -11,7 +12,8 @@ def convertDataToParquet(df: pd.DataFrame, name: str) -> None:
 
 def loadData(rechnung_path: str, kunden_path: str) -> tuple:
   df_rechnung = pd.read_parquet(rechnung_path)
-  df_kunden = pd.read_csv(kunden_path, sep=';', low_memory=False, encoding='utf-8-sig')
+  df_rechnung['Kunde_Verkauf_SK'] = df_rechnung['Kunde_Verkauf_SK'].astype(str) # Convert to string for merging
+  df_kunden = pd.read_csv(kunden_path, sep=';', low_memory=False, encoding='utf-8-sig', dtype={'Kunde_SK': str, 'PLZ-Code': str})
   return df_rechnung, df_kunden
 
 
@@ -52,32 +54,23 @@ def initialCleaning(df: pd.DataFrame) -> pd.DataFrame:
     }
   )
 
-  df['PostalCode'] = df['PostalCode'].astype(str)
   df = df.dropna(subset=["City", "PostalCode"])
-  df = df[df['PostalCode'].str.match(r"^(?!00000)\d{5}$")]
+
+  # Filter PostalCode without using lookahead regex
+  df = df[df['PostalCode'].str.len() == 5]
+  df = df[df['PostalCode'] != '00000']
 
   df['OrderDate'] = pd.to_datetime(df['OrderDate'], format='%Y%m%d')
-  df['Season'] = df['OrderDate'].dt.month.apply(seasonFromMonth)
-  df['CustomerID'] = df['CustomerID'].astype(str)
+  
+  # More optimal season calculation
+  df['Season'] = ((df['OrderDate'].dt.month % 12 + 2) // 3 % 4 + 1).map(seasons)
+  
   df['SalesChannel'] = df['SalesChannelCategory'].str.split('_').str[0]
   df = df[df['SalesChannel'].isin(['B2B', 'B2C', 'B2B2C'])]
 
   # Remove rows where NetRevenue is NaN
   df = df.dropna(subset=['NetRevenue'])
   return df
-
-
-def seasonFromMonth(month):
-  if month in [12, 1, 2]:
-    return 'Winter'
-  elif month in [3, 4, 5]:
-    return 'Spring'
-  elif month in [6, 7, 8]:
-    return 'Summer'
-  elif month in [9, 10, 11]:
-    return 'Autumn'
-  else:
-    return 'Unknown'
 
 
 def blendPostalCodes(df: pd.DataFrame, plz_path: str):
@@ -193,7 +186,7 @@ if __name__ == "__main__":
   df_merged = mergeOnKunden(df_rechnung, df_kunden)
   print('Data merged')
   df_cleaned = initialCleaning(df_merged)
-  print('Data cleaned')
+  print('Data cleaned')  
   df_blended = blendPostalCodes(df_cleaned, 'data/zuordnung_plz_ort.csv')
   print('Data blended')
   df_final = finalCleaning(df_blended)
