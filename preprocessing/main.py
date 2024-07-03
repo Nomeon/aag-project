@@ -166,6 +166,11 @@ def fillMissingStates(row):
         return row['State']
 
 
+def addFeatures(df: pd.DataFrame) -> pd.DataFrame:
+    reference_date = pd.to_datetime('2023-12-31', format='%Y%m%d')
+    df['DaysSinceLastOrder'] = (reference_date - df['OrderDate']).dt.days
+
+
 def finalCleaning(df: pd.DataFrame) -> pd.DataFrame:
   # Manually fill in missing states
   df.loc[(df['PostalCode'] == '69966') & (df['State'].isnull()), 'State'] = 'Baden-Württemberg'
