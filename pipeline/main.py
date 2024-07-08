@@ -6,19 +6,23 @@ def main():
   """Runs the cleaning pipeline to convert the initial data into a cleaned parquet file.
 
   """
-  # rechnung_path = "data/Rechnungen.parquet"
-  # kunden_path = "data/Kunden.csv"
+  rechnung_path = "data/Rechnungen_new.parquet"
+  kunden_path = "data/Kunden.csv"
 
-  # df_rechnung, df_kunden = helpers.loadInitialData(rechnung_path, kunden_path)
-  # df = preprocessing.mergeOnKunden(df_rechnung, df_kunden)
-  # df = preprocessing.initialCleaning(df)
-  # print(df.head())
-  rechnung_path = "data/Rechnungen_new.csv"
-  df = pd.read_csv(rechnung_path, sep=",", encoding="utf-8-sig", low_memory=False)
-  print(df.head())
-  print(df.info())
-  print(df.columns)
-  df.to_parquet("data/Rechnungen_new.parquet")
+  df_rechnung, df_kunden = helpers.loadInitialData(rechnung_path, kunden_path)
+  print('Data loaded.')
+  df = preprocessing.mergeOnKunden(df_rechnung, df_kunden)
+  helpers.convertDataToParquet(df, "data/merged_data.parquet")
+  print('Data merged.')
+  df = preprocessing.initialCleaning(df)
+  helpers.convertDataToParquet(df, "data/initial_cleaned_data.parquet")
+  print('Data cleaned.')
+  df = preprocessing.blendPostalCodes(df, 'data/zuordnung_plz_ort.csv')
+  helpers.convertDataToParquet(df, "data/blended_data.parquet")
+  print('Postal codes blended.')
+  df = preprocessing.finalCleaning(df)
+  helpers.convertDataToParquet(df, "data/cleaned_data.parquet")
+  print('Data done.')
 
 
 if __name__ == '__main__':
