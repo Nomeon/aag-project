@@ -1,38 +1,23 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
-# load the needed packages
 import pandas as pd
 import numpy as np
 from datetime import datetime
 
 from sklearn.cluster import KMeans
-from sklearn.feature_extraction import FeatureHasher
-from sklearn.preprocessing import OneHotEncoder, StandardScaler, MinMaxScaler, RobustScaler, MaxAbsScaler
+from sklearn.preprocessing import RobustScaler
 from sklearn.metrics import silhouette_score
-from sklearn.decomposition import PCA
-from scipy.spatial import distance
-
-
-# In[ ]:
-
 
 # assumes complete preprocessingpipeline with added features 
 
 # get top 25% most valuable customers
 def getTop25PercentCustomers(df: pd.DataFrame) -> pd.DataFrame:
-    
     """Takes the complete dataset and creates a subset of the top 25% of the most valuable customer based on their share of the total NetRevenue.
 
-  Args:
-    df (pd.DataFrame): The preprocessed DataFrame. Necessary Columns are "OrderNumber", "OrderDate", "CustomerID", "NetRevenue".
+    Args:
+      df (pd.DataFrame): The preprocessed DataFrame. Necessary Columns are "OrderNumber", "OrderDate", "CustomerID", "NetRevenue".
 
-  Returns:
-    pd.DataFrame: The subset DataFrame.
-  """
+    Returns:
+      pd.DataFrame: The subset DataFrame.
+    """
     # keep only necessary columns
     df = df[["OrderNumber", "OrderDate", "CustomerID", "NetRevenue"]]
     
@@ -55,23 +40,19 @@ def getTop25PercentCustomers(df: pd.DataFrame) -> pd.DataFrame:
     return orders_top25
 
 
-# In[ ]:
-
-
 # create dataset on customer level containing behavior features & cluster customers
 
-def clusterRFM(orders_top25: pd.DataFrame) -> pd.DataFrame:
-    
+def clusterRFM(orders_top25: pd.DataFrame) -> pd.DataFrame: 
     """Takes the order dataset and creates RFM features per customer ID. 
     Then clusters the customers based on these features and for the optimal number of clusters between 3 and 10 based on Silhouette score. 
     Returns the customer dataset with assigned clusters.
   
-  Args:
-    orders_top25 (pd.DataFrame): The top25 percent of customers DataFrame.
+    Args:
+      orders_top25 (pd.DataFrame): The top25 percent of customers DataFrame.
 
-  Returns:
-    pd.DataFrame: The DataFrame including assigned clusters based on purchase behavior per CustomerID.
-  """
+    Returns:
+      pd.DataFrame: The DataFrame including assigned clusters based on purchase behavior per CustomerID.
+    """
 
     # Recency = time since last order, Frequency = number of orders, Monetary = sum of netRevenue
     rfm = pd.DataFrame()
@@ -148,18 +129,12 @@ def clusterRFM(orders_top25: pd.DataFrame) -> pd.DataFrame:
     return clustered_customers_df
 
 
-# In[ ]:
-
-
 ###### ideally not needed with final preprocessing pipeline ######
 
 # preprocessing to get final dataset with transformed values (cf. repo files)
 #df = pd.read_parquet('cleaned_data.parquet')
 #df.info()
 #df = df[df['OrderDate'].dt.year == 2023]
-
-
-# In[ ]:
 
 
 ##### function calls in main / pipeline: #####

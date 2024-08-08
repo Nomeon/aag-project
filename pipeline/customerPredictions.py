@@ -1,29 +1,9 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
-# load the needed packages
 import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-from datetime import datetime
 from datetime import timedelta
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
-from scipy.spatial import distance
 import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
-from tensorflow.keras.layers import LSTM
-from tensorflow.keras.layers import Dropout
-from sklearn.metrics import mean_squared_error
 from statsmodels.tsa.arima.model import ARIMA
-
-
-# In[ ]:
-
 
 # assumes complete preprocessing-pipeline with added features and completed clustering
 
@@ -44,16 +24,16 @@ def predictRevenuePerCluster(clustered_customers_df: pd.DataFrame, allOrders: pd
     
     """Takes the complete dataset and the assigned cluster for each customer and creates predicts the future net revenue values on a weekly basis per cluster for the next 6 months.
 
-  Args:
-    clustered_customers_df (pd.DataFrame): The output dataframe from the clusterRFM()-function including CustomerID and assigned cluster.
-    allOrders (pd.DataFrame): The preprocessed DataFrame. Necessary Columns are "OrderDate", "CustomerID", "NetRevenue"..
-    predictionType (str): Choice of prediction model approach. Either "LSTM" or "ARIMA".
-    clusterID (int): Choice of cluster to predict for, that is the number of the respective cluster in the clustered_customers_df.
-    modeltype (int): Choice of specific NN architecture design for the LSTM prediction. Either 1 for a sequential model including 1 LSTM layer and the Huber-loss-function, 2 for a sequential model including 2 LSTM layers, 2 Dropout layers, and the MSE-loss-function.
+    Args:
+      clustered_customers_df (pd.DataFrame): The output dataframe from the clusterRFM()-function including CustomerID and assigned cluster.
+      allOrders (pd.DataFrame): The preprocessed DataFrame. Necessary Columns are "OrderDate", "CustomerID", "NetRevenue"..
+      predictionType (str): Choice of prediction model approach. Either "LSTM" or "ARIMA".
+      clusterID (int): Choice of cluster to predict for, that is the number of the respective cluster in the clustered_customers_df.
+      modeltype (int): Choice of specific NN architecture design for the LSTM prediction. Either 1 for a sequential model including 1 LSTM layer and the Huber-loss-function, 2 for a sequential model including 2 LSTM layers, 2 Dropout layers, and the MSE-loss-function.
 
-  Returns:
-    pd.DataFrame: A DataFrame containing the predicted future revenue values. For the LSTM model this includes the original data, the training, the testing, and the predicted data. For the ARIMA model this includes the original data, the fitting data, and the predicted data.
-  """
+    Returns:
+      pd.DataFrame: A DataFrame containing the predicted future revenue values. For the LSTM model this includes the original data, the training, the testing, and the predicted data. For the ARIMA model this includes the original data, the fitting data, and the predicted data.
+    """
     
     
     ### prepare the given datasets
@@ -117,21 +97,21 @@ def predictRevenuePerCluster(clustered_customers_df: pd.DataFrame, allOrders: pd
         # model option with best parameters as proposed from grid search
         if (modeltype == 1):
             # create and fit the LSTM network
-            model = Sequential()
-            model.add(LSTM(24, activation='relu', input_shape=(1, look_back)))
-            model.add(Dense(1))
+            model = tf.keras.models.Sequential()
+            model.add(tf.keras.layers.LSTM(24, activation='relu', input_shape=(1, look_back)))
+            model.add(tf.keras.layers.Dense(1))
             model.compile(loss='huber', optimizer='adam', metrics=['mse', 'mae', 'mape'])
             model.fit(trainX, trainY, epochs=250, batch_size=4, verbose=2)
             
         # model option to include dropouts for handling overfitting
         elif (modeltype == 2):
             # create and fit the LSTM network
-            model = Sequential()
-            model.add(LSTM(100, activation='relu', input_shape=(1, look_back), return_sequences=True))
-            model.add(Dropout(0.2))
-            model.add(LSTM(50, activation='relu'))
-            model.add(Dropout(0.2))
-            model.add(Dense(1))
+            model = tf.keras.models.Sequential()
+            model.add(tf.keras.layers.LSTM(100, activation='relu', input_shape=(1, look_back), return_sequences=True))
+            model.add(tf.keras.layers.Dropout(0.2))
+            model.add(tf.keras.layers.LSTM(50, activation='relu'))
+            model.add(tf.keras.layers.Dropout(0.2))
+            model.add(tf.keras.layers.Dense(1))
             model.compile(optimizer='adam', loss='mse', metrics=['mse', 'mae', 'mape'])
             model.fit(trainX, trainY, epochs=250, batch_size=4, verbose=2)
         
@@ -234,11 +214,6 @@ def predictRevenuePerCluster(clustered_customers_df: pd.DataFrame, allOrders: pd
         # final prediction output
         return combined_df
     
-
-
-# In[ ]:
-
-
 # to be run in main():
 
 # load relevant data if not given through previously run functions
