@@ -20,7 +20,9 @@
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Helpers" href="helpers.html" />
+    <link rel="prev" title="Main entry point" href="main.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -43,15 +45,20 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Preprocessing</a><ul>
-<li><a class="reference internal" href="#preprocessing.initialCleaning"><code class="docutils literal notranslate"><span class="pre">initialCleaning()</span></code></a></li>
-<li><a class="reference internal" href="#preprocessing.mergeOnKunden"><code class="docutils literal notranslate"><span class="pre">mergeOnKunden()</span></code></a></li>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="main.html">Main entry point</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Preprocessing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#preprocessing.addFeatures"><code class="docutils literal notranslate"><span class="pre">addFeatures()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#preprocessing.blendPostalCodes"><code class="docutils literal notranslate"><span class="pre">blendPostalCodes()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#preprocessing.finalCleaning"><code class="docutils literal notranslate"><span class="pre">finalCleaning()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#preprocessing.initialCleaning"><code class="docutils literal notranslate"><span class="pre">initialCleaning()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#preprocessing.mergeOnKunden"><code class="docutils literal notranslate"><span class="pre">mergeOnKunden()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="helpers.html">Helpers</a></li>
 </ul>
-</div>
+
         </div>
       </div>
     </nav>
@@ -83,6 +90,60 @@ This includes loading the initial data provided by AAG, merging the data,
 cleaning the data, adding basic extra features, and saving the result to
 a final cleaned parquet file.</p>
 <dl class="py function" id="module-preprocessing">
+<dt class="sig sig-object py" id="preprocessing.addFeatures">
+<span class="sig-prename descclassname"><span class="pre">preprocessing.</span></span><span class="sig-name descname"><span class="pre">addFeatures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#preprocessing.addFeatures" title="Link to this definition"></a></dt>
+<dd><p>Adds new features to the DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – The DataFrame to process.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The DataFrame with the new features.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="preprocessing.blendPostalCodes">
+<span class="sig-prename descclassname"><span class="pre">preprocessing.</span></span><span class="sig-name descname"><span class="pre">blendPostalCodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plz_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#preprocessing.blendPostalCodes" title="Link to this definition"></a></dt>
+<dd><p>Blends the PostalCode column with external Postalcodes data, to correct inconsistencies. source: <a class="reference external" href="https://www.suche-postleitzahl.org/">https://www.suche-postleitzahl.org/</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – The DataFrame to blend.</p></li>
+<li><p><strong>plz_path</strong> (<em>str</em>) – The path to the external PostalCodes data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The blended DataFrame.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="preprocessing.finalCleaning">
+<span class="sig-prename descclassname"><span class="pre">preprocessing.</span></span><span class="sig-name descname"><span class="pre">finalCleaning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#preprocessing.finalCleaning" title="Link to this definition"></a></dt>
+<dd><p>Cleans the DataFrame by filling in missing states and dropping unnecessary columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – The DataFrame to clean.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The cleaned DataFrame</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="preprocessing.initialCleaning">
 <span class="sig-prename descclassname"><span class="pre">preprocessing.</span></span><span class="sig-name descname"><span class="pre">initialCleaning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#preprocessing.initialCleaning" title="Link to this definition"></a></dt>
 <dd><p>Cleans the DataFrame by renaming columns, dropping rows with missing values, filtering PostalCode, converting OrderDate to datetime, and adding a Season column.</p>
@@ -124,12 +185,15 @@ a final cleaned parquet file.</p>
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="main.html" class="btn btn-neutral float-left" title="Main entry point" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="helpers.html" class="btn btn-neutral float-right" title="Helpers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Bayir, Borger, Friedrichs, Mälhmann, McCarthy, Nijhuis, Nikolarakis.</p>
+    <p>&#169; Copyright 2024, Bayir, Borger, Friedrichs, Mählmann, McCarthy, Nijhuis, Nikolarakis.</p>
   </div>
 
    

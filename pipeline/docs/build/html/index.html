@@ -48,6 +48,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="main.html">Main entry point</a></li>
 <li class="toctree-l1"><a class="reference internal" href="preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customerClustering.html">Customer clustering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customerPredictions.html">Customer predictions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="helpers.html">Helpers</a></li>
 </ul>
 
@@ -87,15 +89,37 @@ file that is used for the next part, clustering.</p>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="main.html">Main entry point</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="main.html#main.customerPrediction"><code class="docutils literal notranslate"><span class="pre">customerPrediction()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="main.html#main.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="main.html#main.preprocessData"><code class="docutils literal notranslate"><span class="pre">preprocessData()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="preprocessing.html">Preprocessing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html#preprocessing.addFeatures"><code class="docutils literal notranslate"><span class="pre">addFeatures()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html#preprocessing.blendPostalCodes"><code class="docutils literal notranslate"><span class="pre">blendPostalCodes()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html#preprocessing.finalCleaning"><code class="docutils literal notranslate"><span class="pre">finalCleaning()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="preprocessing.html#preprocessing.initialCleaning"><code class="docutils literal notranslate"><span class="pre">initialCleaning()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="preprocessing.html#preprocessing.mergeOnKunden"><code class="docutils literal notranslate"><span class="pre">mergeOnKunden()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="helpers.html">Helpers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customerClustering.html">Customer clustering</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="customerClustering.html#customerClustering.clusterRFM"><code class="docutils literal notranslate"><span class="pre">clusterRFM()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="customerClustering.html#customerClustering.getTop25PercentCustomers"><code class="docutils literal notranslate"><span class="pre">getTop25PercentCustomers()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="customerPredictions.html">Customer predictions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="customerPredictions.html#customerPredictions.predictRevenuePerCluster"><code class="docutils literal notranslate"><span class="pre">predictRevenuePerCluster()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="helpers.html">Helpers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="helpers.html#helpers.convertDataToParquet"><code class="docutils literal notranslate"><span class="pre">convertDataToParquet()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="helpers.html#helpers.fillMissingStates"><code class="docutils literal notranslate"><span class="pre">fillMissingStates()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="helpers.html#helpers.findNearestState"><code class="docutils literal notranslate"><span class="pre">findNearestState()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="helpers.html#helpers.getClosestMatch"><code class="docutils literal notranslate"><span class="pre">getClosestMatch()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="helpers.html#helpers.loadInitialData"><code class="docutils literal notranslate"><span class="pre">loadInitialData()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="helpers.html#helpers.loadParquetFile"><code class="docutils literal notranslate"><span class="pre">loadParquetFile()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </div>
 </section>
@@ -119,7 +143,7 @@ file that is used for the next part, clustering.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Bayir, Borger, Friedrichs, Mälhmann, McCarthy, Nijhuis, Nikolarakis.</p>
+    <p>&#169; Copyright 2024, Bayir, Borger, Friedrichs, Mählmann, McCarthy, Nijhuis, Nikolarakis.</p>
   </div>
 
    

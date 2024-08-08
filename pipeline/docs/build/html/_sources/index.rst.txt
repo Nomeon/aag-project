@@ -22,6 +22,8 @@ file that is used for the next part, clustering.
    
    main
    preprocessing
+   customerClustering
+   customerPredictions
    helpers  
 
 

@@ -48,7 +48,9 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Main entry point</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#main.customerPrediction"><code class="docutils literal notranslate"><span class="pre">customerPrediction()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#main.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#main.preprocessData"><code class="docutils literal notranslate"><span class="pre">preprocessData()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="preprocessing.html">Preprocessing</a></li>
@@ -84,9 +86,40 @@
 <p>In this file, the main pipeline is defined. From here, the functions to
 clean the data are called, and the final parquet file is saved.</p>
 <dl class="py function" id="module-main">
+<dt class="sig sig-object py" id="main.customerPrediction">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">customerPrediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.customerPrediction" title="Link to this definition"></a></dt>
+<dd><p>Runs the full customer prediction pipeline.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – The cleaned DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="main.main">
 <span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.main" title="Link to this definition"></a></dt>
+<dd><p>Runs the full pipeline including the predictions.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="main.preprocessData">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">preprocessData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rechnung_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kunden_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#main.preprocessData" title="Link to this definition"></a></dt>
 <dd><p>Runs the cleaning pipeline to convert the initial data into a cleaned parquet file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rechnung_path</strong> (<em>str</em>) – The path to the Rechnungen_new.parquet file.</p></li>
+<li><p><strong>kunden_path</strong> (<em>str</em>) – The path to the Kunden.csv file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The cleaned DataFrame.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -102,7 +135,7 @@ clean the data are called, and the final parquet file is saved.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Bayir, Borger, Friedrichs, Mälhmann, McCarthy, Nijhuis, Nikolarakis.</p>
+    <p>&#169; Copyright 2024, Bayir, Borger, Friedrichs, Mählmann, McCarthy, Nijhuis, Nikolarakis.</p>
   </div>
 
    
