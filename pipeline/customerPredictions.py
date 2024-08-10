@@ -19,8 +19,8 @@ def create_dataset(dataset, look_back=1):
     return np.array(dataX), np.array(dataY)
 
 
-# predict the net revenue per cluster for the upcoming weeks (6 months)
-def predictRevenuePerCluster(clustered_customers_df: pd.DataFrame, allOrders: pd.DataFrame, predictionType: str = "LSTM", clusterID: int = 1, modeltype: int = 1, weeks: int = 52) -> pd.DataFrame:
+# predict the net revenue per cluster for the upcoming weeks
+def predictRevenuePerCluster(clustered_customers_df: pd.DataFrame, allOrders: pd.DataFrame, predictionType: str = "LSTM", clusterID: int = 1, modeltype: int = 1, predweeks: int = 52) -> pd.DataFrame:
     
     """Takes the complete dataset and the assigned cluster for each customer and creates predicts the future net revenue values on a weekly basis per cluster for the next n weeks.
 
@@ -30,7 +30,7 @@ def predictRevenuePerCluster(clustered_customers_df: pd.DataFrame, allOrders: pd
       predictionType (str): Choice of prediction model approach. Either "LSTM" or "ARIMA".
       clusterID (int): Choice of cluster to predict for, that is the number of the respective cluster in the clustered_customers_df.
       modeltype (int): Choice of specific NN architecture design for the LSTM prediction. Either 1 for a sequential model including 1 LSTM layer and the Huber-loss-function, 2 for a sequential model including 2 LSTM layers, 2 Dropout layers, and the MSE-loss-function.
-      weeks (int): Sets the number of weeks in the future to predict the revenue for. Default is 52 weeks, i.e., 1 year.
+      predweeks (int): Sets the number of weeks in the future to predict the revenue for. Default is 52 weeks, i.e., 1 year.
 
     Returns:
       pd.DataFrame: A DataFrame containing the predicted future revenue values. For the LSTM model this includes the original data, the training, the testing, and the predicted data. For the ARIMA model this includes the original data, the fitting data, and the predicted data.
@@ -134,7 +134,7 @@ def predictRevenuePerCluster(clustered_customers_df: pd.DataFrame, allOrders: pd
         future_predictions = []
 
         # predict the next n weeks
-        for _ in range(weeks):
+        for _ in range(predweeks):
             # reshape the last sequence to the shape [samples, time steps, features]
             input_seq = np.reshape(last_sequence, (1, 1, look_back))
             # predict the next value
@@ -153,7 +153,7 @@ def predictRevenuePerCluster(clustered_customers_df: pd.DataFrame, allOrders: pd
         # create date indices for the new predictions in the final dataset
         dates = lstmdatainput["OrderDate"]
         last_date = dates.iloc[-1]
-        future_dates = [last_date + timedelta(weeks=i) for i in range(1, (weeks+1))]
+        future_dates = [last_date + timedelta(weeks=i) for i in range(1, (predweeks+1))]
         future_dates = pd.to_datetime(future_dates, format='%Y-%m-%d')
         # combine original dates with future dates
         extended_dates = pd.Series(np.concatenate([dates.values, future_dates]))
@@ -201,7 +201,7 @@ def predictRevenuePerCluster(clustered_customers_df: pd.DataFrame, allOrders: pd
         ### predict future values (after training and testing, i.e.,, the future values, we want to know)
         
         # forecast the next n weeks
-        forecast_steps = weeks
+        forecast_steps = predweeks
         forecast = model_fit.forecast(steps=forecast_steps)
         # DataFrame to hold the forecasted values
         last_date = customlevelpred.index[-1]
