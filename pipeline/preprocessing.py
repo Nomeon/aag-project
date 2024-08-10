@@ -4,6 +4,7 @@ import pandas as pd
 import pgeocode as pgeo
 import helpers
 
+postalcode_cache = {}
 
 def mergeOnKunden(df_rechnung: pd.DataFrame, df_kunden: pd.DataFrame) -> pd.DataFrame:
   """Merges the Rechnungen and Kunden DataFrames on the Kunde_Verkauf_SK column.
@@ -74,7 +75,7 @@ def initialCleaning(df: pd.DataFrame) -> pd.DataFrame:
   return df
 
 
-def blendPostalCodes(df: pd.DataFrame, plz_path: str) -> pd.DataFrame:
+def blendPostalCodes(df: pd.DataFrame, plz_path: str, nomi) -> pd.DataFrame:
   """Blends the PostalCode column with external Postalcodes data, to correct inconsistencies. source: https://www.suche-postleitzahl.org/ 
 
   Args:
@@ -106,12 +107,70 @@ def blendPostalCodes(df: pd.DataFrame, plz_path: str) -> pd.DataFrame:
   )
   merged_df = dask_df.compute()
 
-  merged_df['State'] = merged_df.apply(helpers.fillMissingStates, axis=1)
+  merged_df['State'] = merged_df.apply(lambda row: helpers.fillMissingStates(row), axis=1)
   merged_df['PostalCode'] = merged_df['PostalCode'].astype(str)
 
   filtered_df = merged_df.drop_duplicates(subset=['OrderNumber', 'ArticleID', 'OrderDate', 'CustomerID'])
   filtered_df.loc[:, 'Final_City'] = filtered_df['Final_City'].str.split(',').str[0]
   return filtered_df
+
+
+def getClosestMatch(row: pd.Series, postal_code_to_cities: dict) -> str:
+    possible_cities = postal_code_to_cities.get(row['PostalCode'], [])
+    if len(possible_cities) == 0:
+        return row['City_inconsistent']  # Return original if no cities are found
+    closest_match = process.extractOne(row['City_inconsistent'], possible_cities)[0] #! INVESTIGATE
+    return closest_match
+
+
+def findNearestState(postal_code):
+  nomi = pgeo.Nominatim('de')
+  if postal_code in postalcode_cache:
+    print(f"Found state {postalcode_cache[postal_code]} in cache for postal code {postal_code}")
+    return postalcode_cache[postal_code]
+
+  original_code = postal_code
+  offset = 1
+  
+  while True:
+    decrementing_code = postal_code - offset
+    incrementing_code = postal_code + offset
+
+    # Check decrementing postal code if it doesn't go negative
+    if decrementing_code >= 0:
+      location = nomi.query_postal_code(decrementing_code)
+      if not pd.isna(location['state_name']):
+        postalcode_cache[original_code] = location['state_name']
+        print(f"Found state {location['state_name']} for postal code {original_code}")
+        return location['state_name']
+
+    # Check incrementing postal code
+    location = nomi.query_postal_code(incrementing_code)
+    if not pd.isna(location['state_name']):
+      postalcode_cache[original_code] = location['state_name']
+      print(f"Found state {location['state_name']} for postal code {original_code}")
+      return location['state_name']
+
+    # Increase the offset
+    offset += 1
+
+    # Optionally add a breaking condition if the offset gets too large
+    if offset > 200:  # Assuming you don't want to go beyond 200 postal codes away
+      print(f"No valid state found near postal code {original_code}")
+      return None
+
+
+def fillMissingStates(row):
+    nomi = pgeo.Nominatim('de')
+    if pd.isna(row['State']):
+        postal_code = row['PostalCode']  
+        location = nomi.query_postal_code(postal_code)
+        if pd.isna(location['state_name']):
+            return findNearestState(postal_code)
+        else:
+            return location['state_name']
+    else:
+        return row['State']
 
 
 def addFeatures(df: pd.DataFrame) -> pd.DataFrame:

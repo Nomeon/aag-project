@@ -3,8 +3,10 @@ import preprocessing
 import customerClustering
 import customerPredictions
 import pandas as pd
+import pgeocode as pgeo
 
-def preprocessData(rechnung_path: str, kunden_path: str) -> pd.DataFrame:
+
+def preprocessData(rechnung_path: str, kunden_path: str, nomi) -> pd.DataFrame:
   """Runs the cleaning pipeline to convert the initial data into a cleaned parquet file.
 
   Args:
@@ -14,19 +16,20 @@ def preprocessData(rechnung_path: str, kunden_path: str) -> pd.DataFrame:
   Returns:
     pd.DataFrame: The cleaned DataFrame.
   """
-  df_rechnung, df_kunden = helpers.loadInitialData(rechnung_path, kunden_path)
-  print('Data loaded.')
-  df = preprocessing.mergeOnKunden(df_rechnung, df_kunden)
+  # df_rechnung, df_kunden = helpers.loadInitialData(rechnung_path, kunden_path)
+  # print('Data loaded.')
+  # df = preprocessing.mergeOnKunden(df_rechnung, df_kunden)
   # helpers.convertDataToParquet(df, "data/merged_data.parquet")
-  print('Data merged.')
-  df = preprocessing.initialCleaning(df)
+  # print('Data merged.')
+  # df = preprocessing.initialCleaning(df)
   # helpers.convertDataToParquet(df, "data/initial_cleaned_data.parquet")
-  print('Data cleaned.')
-  df = preprocessing.blendPostalCodes(df, 'data/zuordnung_plz_ort.csv')
-  # helpers.convertDataToParquet(df, "data/blended_data.parquet")
+  # print('Data cleaned.')
+  df = helpers.loadParquetFile("data/initial_cleaned_data.parquet")
+  df = preprocessing.blendPostalCodes(df, 'data/zuordnung_plz_ort.csv', nomi)
+  helpers.convertDataToParquet(df, "data/blended_data.parquet")
   print('Postal codes blended.')
   df = preprocessing.finalCleaning(df)
-  # helpers.convertDataToParquet(df, "data/cleaned_data.parquet")
+  helpers.convertDataToParquet(df, "data/cleaned_data.parquet")
   print('Data done.')
   return df
 
@@ -55,10 +58,12 @@ def main():
   rechnung_path = "data/Rechnungen_new.parquet"
   kunden_path = "data/Kunden.csv"
 
-  df = preprocessData(rechnung_path, kunden_path)
+  nomi = pgeo.Nominatim('de')
+
+  df = preprocessData(rechnung_path, kunden_path, nomi)
   print('Data preprocessed.')
 
-  customerPrediction(df)
+  # customerPrediction(df)
 
 
 if __name__ == '__main__':
