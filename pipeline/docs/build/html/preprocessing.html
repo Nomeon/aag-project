@@ -21,7 +21,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Helpers" href="helpers.html" />
+    <link rel="next" title="Customer clustering" href="customerClustering.html" />
     <link rel="prev" title="Main entry point" href="main.html" /> 
 </head>
 
@@ -56,6 +56,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#preprocessing.mergeOnKunden"><code class="docutils literal notranslate"><span class="pre">mergeOnKunden()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="customerClustering.html">Customer clustering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customerPredictions.html">Customer predictions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="helpers.html">Helpers</a></li>
 </ul>
 
@@ -108,7 +110,7 @@ a final cleaned parquet file.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="preprocessing.blendPostalCodes">
-<span class="sig-prename descclassname"><span class="pre">preprocessing.</span></span><span class="sig-name descname"><span class="pre">blendPostalCodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plz_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#preprocessing.blendPostalCodes" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">preprocessing.</span></span><span class="sig-name descname"><span class="pre">blendPostalCodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plz_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomi</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#preprocessing.blendPostalCodes" title="Link to this definition"></a></dt>
 <dd><p>Blends the PostalCode column with external Postalcodes data, to correct inconsistencies. source: <a class="reference external" href="https://www.suche-postleitzahl.org/">https://www.suche-postleitzahl.org/</a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -187,7 +189,7 @@ a final cleaned parquet file.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="main.html" class="btn btn-neutral float-left" title="Main entry point" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="helpers.html" class="btn btn-neutral float-right" title="Helpers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="customerClustering.html" class="btn btn-neutral float-right" title="Customer clustering" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

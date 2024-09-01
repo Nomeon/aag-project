@@ -54,6 +54,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customerClustering.html">Customer clustering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customerPredictions.html">Customer predictions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="helpers.html">Helpers</a></li>
 </ul>
 
@@ -104,7 +106,7 @@ clean the data are called, and the final parquet file is saved.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="main.preprocessData">
-<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">preprocessData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rechnung_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kunden_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#main.preprocessData" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">preprocessData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rechnung_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kunden_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomi</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#main.preprocessData" title="Link to this definition"></a></dt>
 <dd><p>Runs the cleaning pipeline to convert the initial data into a cleaned parquet file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
