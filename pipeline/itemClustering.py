@@ -6,7 +6,6 @@ from sklearn.preprocessing import RobustScaler
 from sklearn.metrics import silhouette_score
 
 
-
 def getDistributionCentres(row):
     """
     Assigns a Distribution Center based on the State values.
