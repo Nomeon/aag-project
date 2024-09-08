@@ -2,6 +2,7 @@ import helpers
 import preprocessing
 import customerClustering
 import customerPredictions
+import database
 import pandas as pd
 import pgeocode as pgeo
 
@@ -62,7 +63,20 @@ def main():
   df = preprocessData(rechnung_path, kunden_path, nomi)
   print('Data preprocessed.')
 
-  # customerPrediction(df)
+  customerPrediction(df)
+
+
+  
+  combined_lstm_df = database.process_lstm_files('data/LSTM/New/Option4/*.csv')
+  database.save_to_sqlite(combined_lstm_df, 'predictions_LSTM.db', 'predictions_LSTM')
+
+  columns_to_keep_general = ['Date', 'Quantity', 'Train', 'Test', 'Predict', 'Location']
+  combined_df_general = database.read_and_process_excel('data/LSTM/Items/New/*.xlsx', columns_to_keep_general, extract_item_type=False)
+  database.save_to_sqlite(combined_df_general, 'predictions_LSTM.db', 'predictions_LSTM_Items')
+
+  columns_to_keep_products = ['Date', 'Quantity', 'Train', 'Test', 'Predict', 'ItemType', 'Location']
+  combined_df_products = database.read_and_process_excel('data/LSTM/Items/ItemPredicting/*.xlsx', columns_to_keep_products, extract_item_type=True)
+  database.save_to_sqlite(combined_df_products, 'predictions_LSTM.db', 'predictions_LSTM_Items_SpecificProducts')
 
 
 if __name__ == '__main__':
