@@ -1,4 +1,4 @@
-Customer clustering
+Item clustering
 ===================
 
 This part of the pipeline is responsible for clustering the items. The clustering is done using the KMeans algorithm from

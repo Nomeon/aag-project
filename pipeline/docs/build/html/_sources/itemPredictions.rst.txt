@@ -1,4 +1,4 @@
-Customer predictions
+Item predictions
 ====================
 
 This part of the pipeline is responsible for predicting the future purchases of
