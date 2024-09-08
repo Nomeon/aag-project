@@ -48,6 +48,8 @@
 <li class="toctree-l1"><a class="reference internal" href="preprocessing.html">Preprocessing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="customerClustering.html">Customer clustering</a></li>
 <li class="toctree-l1"><a class="reference internal" href="customerPredictions.html">Customer predictions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="itemClustering.html">Customer clustering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="itemPredictions.html">Customer predictions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="helpers.html">Helpers</a></li>
 </ul>
 
@@ -109,6 +111,8 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="itemClustering.html#itemClustering.clusterRFC">clusterRFC() (in module itemClustering)</a>
+</li>
       <li><a href="customerClustering.html#customerClustering.clusterRFM">clusterRFM() (in module customerClustering)</a>
 </li>
       <li><a href="helpers.html#helpers.convertDataToParquet">convertDataToParquet() (in module helpers)</a>
@@ -153,8 +157,12 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="helpers.html#helpers.getClosestMatch">getClosestMatch() (in module helpers)</a>
 </li>
+      <li><a href="itemClustering.html#itemClustering.getDistributionCentres">getDistributionCentres() (in module itemClustering)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="itemClustering.html#itemClustering.getItemDataset">getItemDataset() (in module itemClustering)</a>
+</li>
       <li><a href="customerClustering.html#customerClustering.getTop25PercentCustomers">getTop25PercentCustomers() (in module customerClustering)</a>
 </li>
   </ul></td>
@@ -178,6 +186,22 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="preprocessing.html#preprocessing.initialCleaning">initialCleaning() (in module preprocessing)</a>
 </li>
+      <li>
+    itemClustering
+
+      <ul>
+        <li><a href="itemClustering.html#module-itemClustering">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    itemPredictions
+
+      <ul>
+        <li><a href="itemPredictions.html#module-itemPredictions">module</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -217,6 +241,10 @@
 </li>
         <li><a href="helpers.html#module-helpers">helpers</a>
 </li>
+        <li><a href="itemClustering.html#module-itemClustering">itemClustering</a>
+</li>
+        <li><a href="itemPredictions.html#module-itemPredictions">itemPredictions</a>
+</li>
         <li><a href="main.html#module-main">main</a>
 </li>
         <li><a href="preprocessing.html#module-preprocessing">preprocessing</a>
@@ -228,12 +256,14 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="customerPredictions.html#customerPredictions.predictRevenuePerCluster">predictRevenuePerCluster() (in module customerPredictions)</a>
+      <li><a href="itemPredictions.html#itemPredictions.predict_quantity_per_cluster">predict_quantity_per_cluster() (in module itemPredictions)</a>
 </li>
-      <li><a href="main.html#main.preprocessData">preprocessData() (in module main)</a>
+      <li><a href="customerPredictions.html#customerPredictions.predictRevenuePerCluster">predictRevenuePerCluster() (in module customerPredictions)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="main.html#main.preprocessData">preprocessData() (in module main)</a>
+</li>
       <li>
     preprocessing
 
