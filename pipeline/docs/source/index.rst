@@ -26,6 +26,7 @@ file that is used for the next part, clustering.
    customerPredictions
    itemClustering
    itemPredictions
+   database
    helpers  
 
 
