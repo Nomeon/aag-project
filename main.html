@@ -49,6 +49,7 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Main entry point</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#main.customerPrediction"><code class="docutils literal notranslate"><span class="pre">customerPrediction()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#main.itemPrediction"><code class="docutils literal notranslate"><span class="pre">itemPrediction()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#main.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#main.preprocessData"><code class="docutils literal notranslate"><span class="pre">preprocessData()</span></code></a></li>
 </ul>
@@ -58,6 +59,7 @@
 <li class="toctree-l1"><a class="reference internal" href="customerPredictions.html">Customer predictions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="itemClustering.html">Item clustering</a></li>
 <li class="toctree-l1"><a class="reference internal" href="itemPredictions.html">Item predictions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database.html">Database preparation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="helpers.html">Helpers</a></li>
 </ul>
 
@@ -93,6 +95,17 @@ clean the data are called, and the final parquet file is saved.</p>
 <dt class="sig sig-object py" id="main.customerPrediction">
 <span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">customerPrediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.customerPrediction" title="Link to this definition"></a></dt>
 <dd><p>Runs the full customer prediction pipeline.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – The cleaned DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="main.itemPrediction">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">itemPrediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.itemPrediction" title="Link to this definition"></a></dt>
+<dd><p>Runs the full item prediction pipeline.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – The cleaned DataFrame.</p>
