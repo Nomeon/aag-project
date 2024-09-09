@@ -2,6 +2,8 @@ import helpers
 import preprocessing
 import customerClustering
 import customerPredictions
+import itemClustering
+import itemPredictions
 import database
 import pandas as pd
 import pgeocode as pgeo
@@ -51,6 +53,24 @@ def customerPrediction(df: pd.DataFrame):
   print(predictions)
 
 
+def itemPrediction(df: pd.DataFrame):
+  """Runs the full item prediction pipeline.
+
+  Args:
+    df (pd.DataFrame): The cleaned DataFrame.
+  """
+  
+  item2023 = df[df['OrderDate'].dt.year == 2023]
+  item2023_dc = itemClustering.getDistributionCentres(item2023)
+  itemDataset = itemClustering.getItemDataset(item2023_dc)
+  rfc_clustering = itemClustering.clusterRFC(itemDataset)
+  print('Data clustered.')
+
+  predictions = itemPredictions.predict_quantity_per_cluster(rfc_clustering, itemDataset, "LSTM", "Bayern")
+  print('Predictions done.')
+  print(predictions)
+
+
 def main():
   """Runs the full pipeline including the predictions.
 
@@ -64,9 +84,8 @@ def main():
   print('Data preprocessed.')
 
   customerPrediction(df)
+  itemPrediction(df)
 
-
-  
   combined_lstm_df = database.process_lstm_files('data/LSTM/New/Option4/*.csv')
   database.save_to_sqlite(combined_lstm_df, 'predictions_LSTM.db', 'predictions_LSTM')
 
